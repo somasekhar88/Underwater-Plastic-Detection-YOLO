@@ -1,31 +1,47 @@
 # YOLO Underwater Plastic Detection
 
-This project implements YOLOv8 and YOLOv10 models for detecting underwater plastic objects. It includes Jupyter notebooks for training models and running inference on new images.
+This project implements YOLOv8 and YOLOv10 models for detecting underwater plastic debris. It includes Jupyter notebooks for training and inference, using real-world images from the JAMSTEC Deep-Sea Debris Database (via Roboflow).
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Directory Structure](#directory-structure)
-3. [Available Models](#available-models)
-4. [Training](#training)
-5. [Inference](#inference)
-6. [Customization](#customization)
+1. Overview  
+2. Installation  
+3. Directory Structure  
+4. Dataset Setup  
+5. Available Models  
+6. Training  
+7. Inference  
+8. Customization  
+9. References
 
-## 1. Installation
+---
 
-. Install the required packages:
-   ```
-   pip install ultralytics numpy opencv-python jupyter
-   ```
+## Overview
 
-## 2.. Launch Jupyter Notebook:
-   ```
-   jupyter notebook
-   ```
+- Models used: YOLOv8-s/l and YOLOv10-s/l  
+- Performance evaluated using mAP50, mAP50–95, IoU, Precision, Recall  
+- YOLOv10-s showed the best trade-off between accuracy and computational efficiency  
+- Trained on a curated set of 1,200 underwater images (annotated for plastic detection)
 
-## 3.  Directory Structure
+---
 
-The project contains the following files:
+## Installation
+
+Install the required packages:
+
+```
+pip install ultralytics numpy opencv-python jupyter
+```
+
+To launch Jupyter Notebook:
+
+```
+jupyter notebook
+```
+
+
+
+## Directory Structure
 
 ```
 yolo-underwater-plastic/
@@ -36,6 +52,12 @@ yolo-underwater-plastic/
 │   ├── yolov10s.pt
 │   └── yolov10l.pt
 │
+├── Data/
+│   ├── train/
+│   ├── test/
+│   ├── valid/
+│   └── data.yaml
+│
 ├── Train_Yolo_v8s.ipynb
 ├── Train_Yolo_v8l.ipynb
 ├── Train_Yolo_v10s.ipynb
@@ -44,107 +66,95 @@ yolo-underwater-plastic/
 └── README.md
 ```
 
-### Training Setup
+---
 
-If you want to train your own models, you need to set up your data directory with the following structure:
+## Dataset Setup
+
+This project uses a dataset derived from the JAMSTEC Deep-Sea Debris Database, available via Roboflow.
+
+**Download here:**  
+[Roboflow – Underwater Plastic Detection Dataset](https://universe.roboflow.com/yolov8yolov10comparision/underwaterplasticdetection-9ojxt)
+
+Extract the dataset into the following structure:
 
 ```
-── Data/
-   ├── train/
-   │   ├── images/
-   │   └── labels/
-   ├── test/
-   │   ├── images/
-   │   └── labels/
-   ├── valid/
-   │   ├── images/
-   │   └── labels/
-   └── data.yaml
+Data/
+├── train/
+│   ├── images/
+│   └── labels/
+├── test/
+│   ├── images/
+│   └── labels/
+├── valid/
+│   ├── images/
+│   └── labels/
+└── data.yaml
 ```
 
-Ensure that:
-1. Your images are in the respective `images/` folders.
-2. Corresponding label files are in the `labels/` folders.
-3. The `data.yaml` file is properly configured with paths to your train, test, and validation sets.
-
-## Available Models
-
-This project includes the following pre-trained YOLO models:
-
-- YOLOv8s (small)
-- YOLOv8l (large)
-- YOLOv10s (small)
-- YOLOv10l (large)
-
-These model files are provided in the `Models/` directory.
-
-## Training
-
-To train a model, follow these steps:
-
-1. Set up your data directory as described in the [Training Setup](#training-setup) section.
-2. Open one of the training notebooks:
-   - `Train_Yolo_Models.ipynb`
-
-Each notebook contains the necessary code to:
-
-1. Load the dataset
-2. Configure training parameters
-3. Train the model
-4. Validate the results
-
-You can modify the training parameters within the notebook, such as:
-
-- Number of epochs
-- Image size
-- Batch size
-- Learning rate
-- Optimizer
-
-The notebook will display the number of images, label files, and annotations in your dataset before starting the training process.
-
-## Inference
-
-To run inference on new images, use the `inference.ipynb` notebook. This notebook allows you to:
-
-1. Load a trained model
-2. Select an input image
-3. Run inference
-4. Visualize the results
-
-You can easily modify the notebook to process multiple images or integrate it into your own workflow.
-
-## Customization
-
-### Retraining with New Data
-
-To retrain the model with your own data:
-
-1. Organize your data following the directory structure mentioned in the [Training Setup](#training-setup) section.
-2. Update the `data.yaml` file with the paths to your new dataset.
-3. Modify the appropriate training notebook with your desired parameters.
-
-### Modifying Model Architecture
-
-If you want to use a different YOLO version or modify the model architecture:
-
-1. Add the new model file to the `Models/` directory.
-2. Create a new training notebook based on the existing ones.
-3. Update the model loading code to use the new model.
-
-### Adjusting Hyperparameters
-
-You can modify various hyperparameters directly in the training notebooks, such as:
-
-- Learning rate
-- Optimizer
-- Number of epochs
-- Batch size
-- Image size
-
-Feel free to experiment with these parameters to optimize model performance for your specific use case.
-
+Ensure your `data.yaml` file is correctly configured with paths and class names.
 
 ---
 
-For more information on YOLO models and the Ultralytics framework, visit [Ultralytics Documentation](https://docs.ultralytics.com/).
+## Available Models
+
+| Model       | Type  | Notes                         |
+|-------------|-------|-------------------------------|
+| YOLOv8s.pt  | Small | Fast, lightweight             |
+| YOLOv8l.pt  | Large | More accurate, heavier        |
+| YOLOv10s.pt | Small | Best accuracy/efficiency      |
+| YOLOv10l.pt | Large | Higher compute, good accuracy |
+
+---
+
+## Training
+
+Prepare the dataset as described above.
+
+Open a training notebook:
+- `Train_Yolo_v8s.ipynb`
+- `Train_Yolo_v10s.ipynb`
+
+Each notebook includes:
+- Loading data  
+- Model configuration  
+- Training loop  
+- Evaluation and visualization  
+
+You can adjust the following training parameters:
+- Number of epochs  
+- Batch size  
+- Image size  
+- Learning rate  
+- Optimizer type  
+
+---
+
+## Inference
+
+To perform inference on new images, open `inference.ipynb`:
+
+- Load a trained model  
+- Select an input image  
+- Run predictions and visualize results  
+
+You can extend the notebook to:
+- Process multiple images  
+- Integrate with pipelines or automation  
+
+---
+
+## Customization
+
+You can customize the project by:
+- Retraining with a new dataset by updating `data.yaml`  
+- Adding or swapping YOLO model versions in the `Models/` folder  
+- Modifying training hyperparameters (learning rate, epochs, etc.)  
+
+---
+
+## References
+
+- Ultralytics YOLOv8 Documentation: https://docs.ultralytics.com/  
+- YOLOv10 Paper: https://arxiv.org/abs/2405.14458  
+- JAMSTEC Deep-Sea Debris Dataset: https://www.godac.jamstec.go.jp/dsdebris/e/  
+- Roboflow Dataset Hosting: https://universe.roboflow.com/  
